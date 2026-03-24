@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="DiffProject.Api/DiffProject.Api.csproj" />
+  <Project Path="DiffProject.Tests/DiffProject.Tests.csproj" />
+</Solution>
