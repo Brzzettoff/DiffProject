@@ -23,15 +23,26 @@ public class DiffController(DiffService service) : ControllerBase
     [HttpPut("{side}")]
     public IActionResult PutData(string id, string side, [FromBody] DataInput input)
     {
-        if (!Enum.TryParse<DiffSide>(side, true, out var sideEnum)) return NotFound();
-        if (string.IsNullOrEmpty(input?.Data)) return BadRequest();
+        //using enum to check the "left"/"right" input 
+        if (!Enum.TryParse<DiffSide>(side, true, out var sideEnum))
+        { 
+            return NotFound(); 
+        }
+
+        if (string.IsNullOrEmpty(input?.Data))
+        {
+            return BadRequest();
+        }
 
         try
         {
             service.SaveInput(id, input.Data, sideEnum);
             return CreatedAtAction(nameof(GetDiff), new { id }, null);
         }
-        catch (InvalidBase64Exception) { return BadRequest("Not a B64 data"); }
+        catch (InvalidBase64Exception) 
+        { 
+            return BadRequest("Not a B64 data"); 
+        }
     }
 
     /* calling GET + id returns:
@@ -46,8 +57,9 @@ public class DiffController(DiffService service) : ControllerBase
     public IActionResult GetDiff(string id)
     {
         var result = service.GetDiff(id);
-        // If the service returns null, we return the 404
+        // If the service returns null it is translated to 404 
         if (result == null) return NotFound();
+        
         return Ok(result);
     }
 }

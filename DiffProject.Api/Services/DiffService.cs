@@ -28,16 +28,28 @@ public class DiffService(IDiffRepository repo)
     public DiffResponse? GetDiff(string id)
     {
         var entity = repo.GetDiffEntity(id);
-        if (entity.Left == null || entity.Right == null) return null;
-        if (entity.Left == entity.Right) return new("Equals");
-        if (entity.Left.Length != entity.Right.Length) return new("SizeDoNotMatch");
+        if (entity.Left == null || entity.Right == null)
+        {
+            return null;
+        }
+
+        if (entity.Left == entity.Right)
+        {
+            return new("Equals");
+        }
+
+        if (entity.Left.Length != entity.Right.Length)
+        {
+            return new("SizeDoNotMatch");
+        }
 
         return new("ContentDoNotMatch", CalculateOffsets(entity.Left, entity.Right));
     }
 
-    private static List<DiffOffset> CalculateOffsets(string left, string right)
+    //some basic comparrison logic
+    private static List<DiffObject> CalculateOffsets(string left, string right)
     {
-        var result = new List<DiffOffset>();
+        var result = new List<DiffObject>();
         for (int i = 0; i < left.Length; i++)
         {
             if (left[i] != right[i])

@@ -15,6 +15,7 @@ public interface IDiffRepository
     void UpdateDiffEntity(string id, DiffEntity entity);
 }
 
+//the InMem repo implementation
 public class InMemoryRepository : IDiffRepository
 {
     private readonly ConcurrentDictionary<string, DiffEntity> _db = new();
