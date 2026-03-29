@@ -29,7 +29,7 @@ JSON containing base64 encoded binary data on both endpoints.
 	} 
 	```
 	```
-	GET /v1/diff/1/left
+	GET /v1/diff/1/right
 	{ 
 		"data": "AABAAA==" 
 	} 
