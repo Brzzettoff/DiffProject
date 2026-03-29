@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using DiffProject.Api.Models;
+﻿using DiffProject.Api.Models;
 using DiffProject.Api.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DiffProject.Api.Controllers;
 
@@ -10,7 +10,7 @@ public class DiffController(DiffService service) : ControllerBase
 {
     /* PUT / id / side 
      * + data in body
-     * sets data and returns:
+     * stores data and returns:
      * if data is not a B64 value: BadRequest
      * if data is null: BadRequest
      * if data with id and side exists, replaces data on id position, returns: OK
@@ -21,12 +21,12 @@ public class DiffController(DiffService service) : ControllerBase
      */
 
     [HttpPut("{side}")]
-    public IActionResult PutData(string id, string side, [FromBody] DataInput input)
+    public IActionResult StoreData(string id, string side, [FromBody] DataInput input)
     {
         //using enum to check the "left"/"right" input 
         if (!Enum.TryParse<DiffSide>(side, true, out var sideEnum))
-        { 
-            return NotFound(); 
+        {
+            return NotFound();
         }
 
         if (string.IsNullOrEmpty(input?.Data))
@@ -36,12 +36,12 @@ public class DiffController(DiffService service) : ControllerBase
 
         try
         {
-            service.SaveInput(id, input.Data, sideEnum);
+            service.StoreData(id, input.Data, sideEnum);
             return CreatedAtAction(nameof(GetDiff), new { id }, null);
         }
-        catch (InvalidBase64Exception) 
-        { 
-            return BadRequest("Not a B64 data"); 
+        catch (InvalidBase64Exception)
+        {
+            return BadRequest("Not a B64 data");
         }
     }
 
@@ -59,7 +59,7 @@ public class DiffController(DiffService service) : ControllerBase
         var result = service.GetDiff(id);
         // If the service returns null it is translated to 404 
         if (result == null) return NotFound();
-        
+
         return Ok(result);
     }
 }

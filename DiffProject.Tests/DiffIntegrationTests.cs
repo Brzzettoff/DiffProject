@@ -19,7 +19,7 @@ public class DiffIntegrationTests : IClassFixture<WebApplicationFactory<Program>
         var response = await _client.GetAsync($"/v1/diff/{id}");
 
         Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
-        
+
     }
 
     [Fact]

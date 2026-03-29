@@ -21,7 +21,7 @@ public class DiffServiceTests
         // Arrange
         var id = "1";
         _repoMock.Setup(x => x.GetDiffEntity(id)).Returns(new DiffEntity());
-      
+
         // Act
         var result = _service.GetDiff(id);
 

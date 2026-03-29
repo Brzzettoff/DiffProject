@@ -1,25 +1,25 @@
-﻿using DiffProject.Api.Models;
-using DiffProject.Api.Dao;
+﻿using DiffProject.Api.Dao;
+using DiffProject.Api.Models;
 
 namespace DiffProject.Api.Services;
 
 public class DiffService(IDiffRepository repo)
 {
-    public void SaveInput(string id, string data, DiffSide side)
+    public void StoreData(string id, string data, DiffSide side)
     {
-        try 
-        { 
-            Convert.FromBase64String(data); 
+        try
+        {
+            Convert.FromBase64String(data);
         }
-        catch 
-        { 
-            throw new InvalidBase64Exception(); 
+        catch
+        {
+            throw new InvalidBase64Exception();
         }
 
         var entity = repo.GetDiffEntity(id);
-        if (side == DiffSide.Left) 
+        if (side == DiffSide.Left)
             entity.Left = data;
-        else 
+        else
             entity.Right = data;
 
         repo.UpdateDiffEntity(id, entity);
@@ -46,10 +46,11 @@ public class DiffService(IDiffRepository repo)
         return new("ContentDoNotMatch", CalculateOffsets(entity.Left, entity.Right));
     }
 
-    //some basic comparrison logic
+    //Some basic comparrison logic.
     private static List<DiffObject> CalculateOffsets(string left, string right)
     {
         var result = new List<DiffObject>();
+        //The sizes of left/right were checked before. Both are equal.
         for (int i = 0; i < left.Length; i++)
         {
             if (left[i] != right[i])
